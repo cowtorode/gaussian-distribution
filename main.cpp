@@ -45,6 +45,7 @@ double generator()
 #define p_low (0.02425)
 #define p_high (0.97575) // 1 - p_low
 
+// https://web.archive.org/web/20150910144400/http://home.online.no/~pjacklam/notes/invnorm
 double ncdinv(double p)
 {
 	double q;
@@ -99,6 +100,13 @@ void simulate_distribution()
 	for (int i = 0; i < ITERATIONS; ++i)
 	{
 		int index = round(ncdinv(generator()) + SAMPLE_SIZE * 0.5);
+
+		if (index < 0 || index > SAMPLE_SIZE - 1)
+		{
+			// could generate outside of sample size (very unlikely
+			std::cout << "Hit outside of sample size: " << index << std::endl;
+			continue;
+		}
 
 		++distribution[index];
 	}
